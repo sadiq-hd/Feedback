@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Research &amp; Innovation Complex — Feedback</title>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+<div class="top-strip"></div>
+
+<div class="wall">
+
+  <!-- TOP: building name -->
+  <div class="zone-top">
+    <div class="ric-name">
+      <span class="r1">Research &amp; Innovation Complex</span>
+      <span class="r2">Video Wall Feedback Station</span>
+    </div>
+  </div>
+
+  <!-- MIDDLE: station | center | station -->
+  <div class="zone-mid">
+
+    <div class="station" id="station-L"></div>
+
+    <!-- DECORATIVE CENTER -->
+    <div class="zone-center">
+      <div class="center-inner">
+        <div class="c-rings">
+          <div class="c-ring cr1"></div>
+          <div class="c-ring cr2"></div>
+          <div class="c-ring cr3"></div>
+          <div class="c-orb"></div>
+        </div>
+        <div class="c-title">Share Your<br/><em class="c-em">Opinion</em></div>
+        <div class="c-subtitle">on the Video Wall</div>
+        <div class="c-divider">
+          <div class="c-line"></div>
+          <div class="c-diamond"></div>
+          <div class="c-line"></div>
+        </div>
+        <div class="c-count">
+          <div class="c-num" id="totalCount">0</div>
+          <div class="c-lbl">responses today</div>
+        </div>
+        <canvas class="c-particles" id="cParticles"></canvas>
+        <div class="c-arrows">
+          <div class="c-arr c-arr-l"><span class="c-arr-icon">←</span><span class="c-arr-txt">Tap here</span></div>
+                    <div class="c-arr c-arr-l"></span><span class="c-arr-txt">OR</span></div>
+
+          <div class="c-arr c-arr-r"><span class="c-arr-txt">Tap here</span><span class="c-arr-icon">→</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="station" id="station-R"></div>
+
+  </div>
+
+  <!-- BOTTOM: minimal label -->
+  <div class="zone-bottom">
+    <span class="bottom-label">Research &amp; Innovation Complex &nbsp;·&nbsp; Feedback Station</span>
+  </div>
+
+</div>
+
+<!-- PIN MODAL -->
+<div id="pinModal">
+  <div class="pin-box">
+    <div class="pin-icon">🔐</div>
+    <h3>Admin Access</h3>
+    <p>Enter your PIN to open the dashboard</p>
+    <div class="pin-dots">
+      <div class="pd" id="pd0"></div><div class="pd" id="pd1"></div>
+      <div class="pd" id="pd2"></div><div class="pd" id="pd3"></div>
+    </div>
+    <div class="pin-grid" id="pinGrid"></div>
+    <button class="pin-cancel" onclick="closePinModal()">Cancel</button>
+  </div>
+</div>
+
+<div id="secretTrigger"></div>
+
+<script src="questions.js"></script>
+<script src="station.js"></script>
+<script>
+  initBgCanvas();
+  initCenterParticles();
+  new Station(document.getElementById('station-L'), 'L');
+  new Station(document.getElementById('station-R'), 'R');
+  initAdminTrigger();
+  updateTotalCount();
+</script>
+</body>
+</html>

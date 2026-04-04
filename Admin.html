@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RIC Feedback — Admin Dashboard</title>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body class="admin-page">
+<div class="admin-wrap">
+
+  <!-- HEADER -->
+  <div class="admin-hd">
+    <div class="admin-hd-l">
+      <span>📊</span>
+      <h1>Response Dashboard — Research &amp; Innovation Complex</h1>
+      <span class="a-badge" id="aCount">0</span>
+    </div>
+    <div class="admin-btns">
+      <button class="a-btn a-json"  onclick="exportJSON()">⬇ Export JSON</button>
+      <button class="a-btn a-csv"   onclick="exportCSV()">⬇ Export CSV</button>
+      <button class="a-btn a-clear" onclick="clearData()">🗑 Clear All</button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="admin-stats" id="statsGrid"></div>
+
+  <!-- RESPONSES -->
+  <div id="respList"><div class="a-empty">Loading…</div></div>
+
+</div>
+
+<script src="questions.js"></script>
+<script>
+  const EMOJI_MAP = {5:'😍',4:'😊',3:'😐',2:'😕',1:'😤'};
+
+  function load(){
+    try{ return JSON.parse(localStorage.getItem('ric_fbk')||'[]'); }catch{ return []; }
+  }
+
+  function render(){
+    const data = load();
+    document.getElementById('aCount').textContent = data.length;
+
+    /* Stats */
+    const byStation = {};
+    data.forEach(r=>{ const s=r.station||'?'; byStation[s]=(byStation[s]||0)+1; });
+    const statCards = [{ lbl:'Total Responses', num:data.length }];
+    Object.keys(byStation).sort().forEach(s=>statCards.push({ lbl:`Station ${s}`, num:byStation[s] }));
+
+    /* Average per question */
+    QUESTIONS.forEach(q=>{
+      const vals = data.map(r=>(r.answers||[]).find(a=>a.questionId===q.id)?.rating).filter(Boolean);
+      if(vals.length){
+        const avg = (vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1);
+        statCards.push({ lbl: q.id.replace(/_/g,' '), num: `${avg}/5` });
+      }
+    });
+
+    document.getElementById('statsGrid').innerHTML = statCards.map(s=>
+      `<div class="stat-card"><div class="stat-num">${s.num}</div><div class="stat-lbl">${s.lbl}</div></div>`
+    ).join('');
+
+    /* Response list */
+    const list = document.getElementById('respList');
+    if(!data.length){
+      list.innerHTML='<div class="a-empty">📭 No responses collected yet.</div>';
+      return;
+    }
+
+    list.innerHTML = `<div class="resp-list">${[...data].reverse().map(r=>`
+      <div class="resp-card">
+        <div class="resp-meta">
+          <span class="resp-id">${r.id}</span>
+          <span class="resp-sta">Station ${r.station||'?'}</span>
+          <span class="resp-time">${new Date(r.timestamp).toLocaleString()}</span>
+        </div>
+        <table class="ans-table">
+          <thead>
+            <tr>
+              <th>Question</th>
+              <th>Rating</th>
+              <th>Comment</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${(r.answers||[]).map(a=>`
+              <tr>
+                <td class="td-q">${a.questionText||a.questionId}</td>
+                <td class="td-r">${EMOJI_MAP[a.rating]||'—'} ${a.ratingLabel||''}</td>
+                <td class="td-c">${a.comment||'—'}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `).join('')}</div>`;
+  }
+
+  /* ── EXPORT JSON ── */
+  function exportJSON(){
+    const data = load();
+    if(!data.length){ alert('No responses yet.'); return; }
+    const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    dl(blob, `ric_feedback_${tag()}.json`);
+  }
+
+  /* ── EXPORT CSV (clean columns, Excel-friendly) ── */
+  function exportCSV(){
+    const data = load();
+    if(!data.length){ alert('No responses yet.'); return; }
+
+    /* Build headers */
+    const fixedHdrs = ['Response ID','Station','Date','Time'];
+    const qHdrs = QUESTIONS.flatMap(q=>[
+      `${q.text} — Rating (1-5)`,
+      `${q.text} — Label`,
+      `${q.text} — Comment`,
+    ]);
+    const allHdrs = [...fixedHdrs, ...qHdrs];
+
+    /* Build rows */
+    const rows = data.map(r=>{
+      const dt = new Date(r.timestamp);
+      const date = dt.toLocaleDateString();
+      const time = dt.toLocaleTimeString();
+      const fixed = [r.id, r.station||'', date, time];
+      const qCols = QUESTIONS.flatMap(q=>{
+        const a = (r.answers||[]).find(x=>x.questionId===q.id)||{};
+        return [
+          a.rating   ?? '',
+          a.ratingLabel ?? '',
+          a.comment  ? `"${a.comment.replace(/"/g,'""')}"` : '',
+        ];
+      });
+      return [...fixed, ...qCols];
+    });
+
+    const csv = [allHdrs, ...rows].map(r=>r.join(',')).join('\n');
+    /* Add BOM for Excel UTF-8 */
+    const blob = new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+    dl(blob, `ric_feedback_${tag()}.csv`);
+  }
+
+  function clearData(){
+    if(!confirm('Delete ALL responses? This cannot be undone.')) return;
+    localStorage.removeItem('ric_fbk');
+    render();
+  }
+
+  function dl(blob,name){
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download=name; a.click();
+    URL.revokeObjectURL(a.href);
+  }
+  function tag(){
+    return new Date().toISOString().slice(0,19).replace(/[T:]/g,'-');
+  }
+
+  render();
+</script>
+</body>
+</html>
