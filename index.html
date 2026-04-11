@@ -26,153 +26,42 @@
 
     <div class="station" id="station-L"></div>
 
-    <!-- CENTER — full-size arch -->
+    <!-- CENTER — decorative (original design, no frame) -->
     <div class="zone-center">
       <canvas class="c-bg-canvas" id="cBgCanvas"></canvas>
 
-      <!-- SVG arch fills the entire center column -->
-      <svg class="arch-svg" viewBox="0 0 300 600" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="gG" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%"   stop-color="#84BD00"/>
-            <stop offset="40%"  stop-color="#50BFE7"/>
-            <stop offset="100%" stop-color="#84BD00"/>
-          </linearGradient>
-          <linearGradient id="gB" x1="100%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%"   stop-color="#50BFE7"/>
-            <stop offset="50%"  stop-color="#A9D17D"/>
-            <stop offset="100%" stop-color="#80D1EE"/>
-          </linearGradient>
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="4" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-          <filter id="glow2">
-            <feGaussianBlur stdDeviation="7" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
+      <div class="center-inner">
+        <!-- Animated rings -->
+        <div class="c-rings">
+          <div class="c-ring cr1"></div>
+          <div class="c-ring cr2"></div>
+          <div class="c-ring cr3"></div>
+          <div class="c-orb"></div>
+        </div>
 
-        <!-- ═══ MAIN ARCH — fills full height, pointed top ═══ -->
-        <!-- Outer arch: rect bottom + pointed arch top -->
-        <path class="arch-outer"
-          d="M 8 598
-             L 8 260
-             Q 8 8 150 8
-             Q 292 8 292 260
-             L 292 598
-             Z"
-          stroke="url(#gG)" stroke-width="4" fill="none" filter="url(#glow)"/>
+        <!-- Text -->
+        <div class="c-title">Share Your<br/><em class="c-em">Opinion</em></div>
+        <div class="c-subtitle">on the Video Wall</div>
 
-        <!-- Middle arch -->
-        <path class="arch-mid"
-          d="M 26 598
-             L 26 268
-             Q 26 30 150 30
-             Q 274 30 274 268
-             L 274 598
-             Z"
-          stroke="url(#gB)" stroke-width="2" fill="none" opacity="0.7"/>
+        <!-- Divider -->
+        <div class="c-divider">
+          <div class="c-line"></div>
+          <div class="c-diamond"></div>
+          <div class="c-line"></div>
+        </div>
 
-        <!-- Inner arch -->
-        <path class="arch-inner2"
-          d="M 44 598
-             L 44 276
-             Q 44 52 150 52
-             Q 256 52 256 276
-             L 256 598
-             Z"
-          stroke="#A9D17D" stroke-width="1" fill="none" opacity="0.35"/>
+        <!-- Response count -->
+        <div class="c-count">
+          <div class="c-num" id="totalCount">0</div>
+          <div class="c-lbl">responses today</div>
+        </div>
 
-        <!-- ═══ CROWN ORNAMENTS (top of arch) ═══ -->
-        <!-- Peak diamond -->
-        <polygon class="crown-spin" points="150,0 158,10 150,20 142,10" fill="url(#gG)" filter="url(#glow)"/>
+        <!-- Particles -->
+        <canvas class="c-particles" id="pfParticles"></canvas>
 
-        <!-- Crown arc decorations -->
-        <path d="M 100 42 Q 125 12 150 6 Q 175 12 200 42"
-          stroke="#84BD00" stroke-width="1.5" fill="none" opacity="0.7"/>
-        <path d="M 112 48 Q 131 22 150 17 Q 169 22 188 48"
-          stroke="#50BFE7" stroke-width="1" fill="none" opacity="0.5"/>
-
-        <!-- Crown side circles -->
-        <circle cx="122" cy="40" r="4" fill="#84BD00" class="pulse-dot" opacity="0.75"/>
-        <circle cx="178" cy="40" r="4" fill="#84BD00" class="pulse-dot" opacity="0.75" style="animation-delay:.5s"/>
-        <circle cx="108" cy="56" r="3" fill="#50BFE7" class="pulse-dot" opacity="0.6" style="animation-delay:1s"/>
-        <circle cx="192" cy="56" r="3" fill="#50BFE7" class="pulse-dot" opacity="0.6" style="animation-delay:1.5s"/>
-
-        <!-- ═══ LEFT COLUMN ORNAMENTS ═══ -->
-        <!-- Diamond accents -->
-        <polygon points="8,200 15,192 22,200 15,208" fill="none" stroke="#84BD00" stroke-width="1.2" opacity="0.6"/>
-        <polygon points="8,350 15,342 22,350 15,358" fill="none" stroke="#50BFE7" stroke-width="1.2" opacity="0.6"/>
-        <polygon points="8,480 15,472 22,480 15,488" fill="none" stroke="#84BD00" stroke-width="1.2" opacity="0.6"/>
-
-        <!-- Pulsing dots along left edge -->
-        <circle cx="8" cy="280" r="4" fill="#84BD00" class="pulse-dot" opacity="0.8"/>
-        <circle cx="8" cy="310" r="3" fill="#A9D17D" opacity="0.55"/>
-        <circle cx="8" cy="390" r="4" fill="#50BFE7" class="pulse-dot" opacity="0.75" style="animation-delay:.7s"/>
-        <circle cx="8" cy="420" r="3" fill="#80D1EE" opacity="0.55"/>
-        <circle cx="8" cy="500" r="4" fill="#84BD00" class="pulse-dot" opacity="0.8" style="animation-delay:1.4s"/>
-        <circle cx="8" cy="530" r="3" fill="#A9D17D" opacity="0.55"/>
-
-        <!-- Horizontal tick marks left -->
-        <line x1="0"  y1="280" x2="18" y2="280" stroke="#84BD00" stroke-width="1.5" opacity="0.55"/>
-        <line x1="0"  y1="390" x2="18" y2="390" stroke="#50BFE7" stroke-width="1.5" opacity="0.55"/>
-        <line x1="0"  y1="500" x2="18" y2="500" stroke="#84BD00" stroke-width="1.5" opacity="0.55"/>
-
-        <!-- ═══ RIGHT COLUMN ORNAMENTS (mirror) ═══ -->
-        <polygon points="278,200 285,192 292,200 285,208" fill="none" stroke="#84BD00" stroke-width="1.2" opacity="0.6"/>
-        <polygon points="278,350 285,342 292,350 285,358" fill="none" stroke="#50BFE7" stroke-width="1.2" opacity="0.6"/>
-        <polygon points="278,480 285,472 292,480 285,488" fill="none" stroke="#84BD00" stroke-width="1.2" opacity="0.6"/>
-
-        <circle cx="292" cy="280" r="4" fill="#84BD00" class="pulse-dot" opacity="0.8" style="animation-delay:.35s"/>
-        <circle cx="292" cy="310" r="3" fill="#A9D17D" opacity="0.55"/>
-        <circle cx="292" cy="390" r="4" fill="#50BFE7" class="pulse-dot" opacity="0.75" style="animation-delay:1.05s"/>
-        <circle cx="292" cy="420" r="3" fill="#80D1EE" opacity="0.55"/>
-        <circle cx="292" cy="500" r="4" fill="#84BD00" class="pulse-dot" opacity="0.8" style="animation-delay:1.75s"/>
-        <circle cx="292" cy="530" r="3" fill="#A9D17D" opacity="0.55"/>
-
-        <line x1="282" y1="280" x2="300" y2="280" stroke="#84BD00" stroke-width="1.5" opacity="0.55"/>
-        <line x1="282" y1="390" x2="300" y2="390" stroke="#50BFE7" stroke-width="1.5" opacity="0.55"/>
-        <line x1="282" y1="500" x2="300" y2="500" stroke="#84BD00" stroke-width="1.5" opacity="0.55"/>
-
-        <!-- ═══ BOTTOM BASE ═══ -->
-        <line x1="0" y1="598" x2="300" y2="598" stroke="url(#gG)" stroke-width="2.5" opacity="0.6"/>
-        <polygon class="crown-spin" points="150,590 158,598 150,606 142,598"
-          fill="#84BD00" opacity="0.65" style="animation-delay:.5s"/>
-        <circle cx="120" cy="598" r="3.5" fill="#84BD00" opacity="0.5"/>
-        <circle cx="180" cy="598" r="3.5" fill="#84BD00" opacity="0.5"/>
-        <circle cx="96"  cy="598" r="2.5" fill="#50BFE7" opacity="0.4"/>
-        <circle cx="204" cy="598" r="2.5" fill="#50BFE7" opacity="0.4"/>
-
-        <!-- ═══ SUBTLE INNER LINES ═══ -->
-        <line x1="70"  y1="300" x2="230" y2="300" stroke="#84BD00" stroke-width="0.5" opacity="0.1"/>
-        <line x1="60"  y1="400" x2="240" y2="400" stroke="#50BFE7" stroke-width="0.5" opacity="0.1"/>
-        <line x1="58"  y1="500" x2="242" y2="500" stroke="#84BD00" stroke-width="0.5" opacity="0.1"/>
-
-        <!-- Animated scan line -->
-        <line class="scan-line" x1="50" y1="100" x2="250" y2="100"
-          stroke="url(#gB)" stroke-width="1.5" opacity="0.3"/>
-
-        <!-- Floating inner particles -->
-        <circle cx="110" cy="200" r="2.5" fill="#84BD00" class="pulse-dot" opacity="0.2" style="animation-delay:.3s"/>
-        <circle cx="190" cy="180" r="2"   fill="#50BFE7" class="pulse-dot" opacity="0.18" style="animation-delay:1s"/>
-        <circle cx="150" cy="150" r="3"   fill="#A9D17D" class="pulse-dot" opacity="0.22" style="animation-delay:.65s"/>
-        <circle cx="125" cy="450" r="2"   fill="#84BD00" class="pulse-dot" opacity="0.18" style="animation-delay:.2s"/>
-        <circle cx="175" cy="470" r="2.5" fill="#50BFE7" class="pulse-dot" opacity="0.18" style="animation-delay:.9s"/>
-        <circle cx="150" cy="380" r="2"   fill="#A9D17D" class="pulse-dot" opacity="0.15" style="animation-delay:1.3s"/>
-      </svg>
-
-      <!-- Particle canvas layered inside arch -->
-      <canvas class="pf-particles" id="pfParticles"></canvas>
-
-      <!-- Footer -->
-      <div class="center-footer">
+        <!-- Tap arrows -->
         <div class="c-arrows">
           <div class="c-arr c-arr-l"><span class="c-arr-icon">←</span><span class="c-arr-txt">Tap to rate</span></div>
-          <div class="c-count-mini">
-            <span class="c-num-mini" id="totalCount">0</span>
-            <span class="c-lbl-mini">responses</span>
-          </div>
           <div class="c-arr c-arr-r"><span class="c-arr-txt">Tap to rate</span><span class="c-arr-icon">→</span></div>
         </div>
       </div>
@@ -211,7 +100,7 @@
 <script>
   initBgCanvas();
   initCenterBg();
-  initFrameParticles();
+  initCenterParticles();
   new Station(document.getElementById('station-L'), 'L');
   new Station(document.getElementById('station-R'), 'R');
   initAdminTrigger();

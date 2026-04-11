@@ -310,8 +310,8 @@ function initCenterBg(){
   const ro=new ResizeObserver(resize);ro.observe(c.parentElement);resize();draw();
 }
 
-/* ── FRAME PARTICLES ── */
-function initFrameParticles(){
+/* ── CENTER PARTICLES ── */
+function initCenterParticles(){
   const c=document.getElementById('pfParticles');if(!c)return;
   const ctx=c.getContext('2d');const COLS=['#84BD00','#50BFE7','#A9D17D','#DAEBC7'];const rnd=(a,b)=>a+Math.random()*(b-a);let W,H,pts=[];
   const resize=()=>{W=c.offsetWidth;H=c.offsetHeight;c.width=W;c.height=H;pts=Array.from({length:14},()=>({x:rnd(0,W),y:rnd(0,H),r:rnd(1.5,3.5),vx:rnd(-0.22,0.22),vy:rnd(-0.22,0.22),col:COLS[Math.floor(Math.random()*COLS.length)],al:rnd(0.1,0.3),ph:rnd(0,Math.PI*2),sp:rnd(0.003,0.009),}));};
